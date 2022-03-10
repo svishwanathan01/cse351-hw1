@@ -13,8 +13,8 @@ df.head()
 # before you move forward to other tasks. Explain what you did to clean the data. 
 
 # %%
-# Check for zeroes in host_id, latitude, longitude, price, minimum nights, # of reviews, availability_365 and evaluate
-# Zeroes in host_id, there are none
+# Check for zeroes in host_id, latitude, longitude, price, minimum nights, # of reviews, availability_365 and
+# evaluate Zeroes in host_id, there are none
 ((df['host_id'] == 0)).any()
 
 # %%
@@ -42,7 +42,8 @@ len(df.loc[df['price'] == 0])
 len(df)
 
 # %%
-# Remove zero rows because removing only 11 out of all 48895 values wouldn't change much. Values can be removed with below code
+# Remove zero rows because removing only 11 out of all 48895 values wouldn't change much. Values can be 
+# removed with below code 
 # df.drop(df[df['price'] <= 0].index, inplace = True)
 
 # %%
@@ -65,8 +66,9 @@ len(df)
 df.boxplot(column=['price'], vert=False, figsize=(20,5)).set_title("Prices of Airbnb Listings")
 
 # %%
-# Checking listings with prices over 4000. They seem to be expensive because of the location, minimum nights, and 
-# because some are luxury apartments as indicated by the name. Wouldn't make sense to remove these listings. 
+# Checking listings with prices over 4000. They seem to be expensive because of the location, minimum nights, 
+# and because some are luxury apartments as indicated by the name. Wouldn't make sense to remove these 
+# listings. 
 df.loc[df['price'] > 4000].sort_values(by=['price'])
 
 # %%
@@ -105,8 +107,9 @@ ngdf = df.groupby('neighbourhood_group')['price'].std().to_frame()
 ngdf.plot.bar(y='price', rot=0, title='Standard Deviation of Neighborhood Groups in Airbnb Homes')
 
 # %%
-# Task 3: Select a set of the most interesting features. Do a pairwise Pearson correlation analysis on all pairs
-# of these variables. Show the result with a heat map and find out most positive and negative correlations. (5 points)
+# Task 3: Select a set of the most interesting features. Do a pairwise Pearson correlation analysis on all 
+# pairs of these variables. Show the result with a heat map and find out most positive and negative 
+# correlations. (5 points)
 
 # %%
 df.corr()
@@ -114,8 +117,8 @@ df.corr()
 # %%
 # Interesting Features:
 # Most positive correlations:
-# Reviews per month and number of reviews (0.55). This makes sense because the number of reviews per month is the total number of reviews 
-# divided by the number of months a property was listed for.
+# Reviews per month and number of reviews (0.55). This makes sense because the number of reviews per month 
+# is the total number of reviews divided by the number of months a property was listed for.
 # Most negative correlations:
 # Minimum nights and reviews per month
 corrdf = df.copy()
@@ -142,8 +145,9 @@ plt.xlim(40.4, 41)
 
 # %%
 # Part B
-# After looking at the graph, it is clear that the most expensive location seems to be Manhattan as the area where the most expensive
-# listings are correspond with where Manhattan is, as seen in the previous scatter plot. 
+# After looking at the graph, it is clear that the most expensive location seems to be Manhattan as the area 
+# where the most expensive listings are correspond with where Manhattan is, as seen in the previous 
+# scatter plot. 
 pricedf = df.copy()
 pricedf = pricedf.loc[pricedf['price'] < 1000].sort_values(by="price")
 sb.scatterplot(data=pricedf, x="latitude", y="longitude", hue="price").set_title("Airbnb Listings Based on Price")
@@ -176,9 +180,9 @@ plt.show()
 # Bolster you reasoning with different plots and correlations. (10 Points)
 
 # %%
-# This scatter plot is made to see the locations where hosts have a lot of listings. The locations can be eyeballed with the
-# graph scatter plots that were made in Part 4 in order to see the neighborhood groups based on the latitude and longitude of 
-# the locations. 
+# This scatter plot is made to see the locations where hosts have a lot of listings. The locations can be 
+# eyeballed with the graph scatter plots that were made in Part 4 in order to see the neighborhood groups 
+# based on the latitude and longitude of the locations. 
 busydf = df.copy()
 busydf = busydf.loc[busydf['calculated_host_listings_count'] > 30].sort_values(by="calculated_host_listings_count")
 sb.scatterplot(data=busydf, x="latitude", y="longitude", hue="calculated_host_listings_count").set_title("Airbnb Listings Based on Neighborhood Groups")
@@ -186,8 +190,8 @@ plt.ylim(-74.3, -73.7)
 plt.xlim(40.4, 41)
 
 # %%
-# In order to see the correlation between the busiest locations, the listings with owners that had few listings were removed as a 
-# lot of those listings wouldn't be super representative of the busiest areas. 
+# In order to see the correlation between the busiest locations, the listings with owners that had few 
+# listings were removed as a lot of those listings wouldn't be super representative of the busiest areas. 
 
 corrdf = df.copy()
 corrdf = corrdf.loc[corrdf['calculated_host_listings_count'] > 30].sort_values(by=['price'])
@@ -212,40 +216,44 @@ corrdf.boxplot(column=['availability_365'], vert=False, figsize=(20,5)).set_titl
 
 # %%
 # Part 6 Analysis:
-# After looking at the scatter plot and the previous scatter plot in Part 4, it seems that most of the busiest listings seem to
-# be in Manhattan. This fact is later confirmed by the bar chart for the Number of Listings for Busiest Hosts Based on Location. 
-# When looking at the correlation analysis for the busiest hosts, there are some numbers that stand out:
+# After looking at the scatter plot and the previous scatter plot in Part 4, it seems that most of the busiest 
+# listings seem to be in Manhattan. This fact is later confirmed by the bar chart for the Number of Listings 
+# for Busiest Hosts Based on Location. When looking at the correlation analysis for the busiest hosts, there 
+# are some numbers that stand out:
 # 1. Correlation Coefficient between Neighborhood Group and Room Type = 0.66
 # 2. Calculated Host Listings Count and Reviews Per Month = 0.7
 # 3. Neighborhood Group and Price = 0.4
 # 4. Room Type and Price = 0.48
-# The coefficient between Neighborhood Group and Room Type is interesting because when thinking about it, whether a listing is shared, 
-# private or the entire home/apartment does relate to the group. In the 5 boroughs, Manhattan can have both entire apartments 
-# or private or shared rooms, while in places like Queens, you're probably getting the entire home/apartment.
-# Another value that was very intriguing was the coefficient between Calculated Host Listings Count and Reviews per Month because
-# it is telling us that with the busiest hosts, the more listings they have, the more reviews they are getting. 
-# With the last two values, it makes sense that the location and room type affects how costly or cheap a listing is. 
+# The coefficient between Neighborhood Group and Room Type is interesting because when thinking about it, 
+# whether a listing is shared, private or the entire home/apartment does relate to the group. In the 5 
+# boroughs, Manhattan can have both entire apartments or private or shared rooms, while in places like 
+# Queens, you're probably getting the entire home/apartment.Another value that was very intriguing was the 
+# coefficient between Calculated Host Listings Count and Reviews per Month because it is telling us that 
+# with the busiest hosts, the more listings they have, the more reviews they are getting. With the last 
+# two values, it makes sense that the location and room type affects how costly or cheap a listing is. 
 
 # %%
 # Task 7: Create two plots (at least one unique plot not used above) of your own using the dataset that you
 # think reveals something very interesting. Explain what it is, and anything else you learned. (10 Points)
 
 # %%
-# The first unique plot that is created is a pie plot, that is used as a proportional representation of data in a column. 
-# Pie plots take in numeric data and the neighborhood column is of a different type, so the number of occurrences were 
-# counted in order to quantify this data. Since the number of listings are well over over 40000 listings, I wanted to 
-# find the most popular neighborhoods and see which places have the most listings within those areas. I selected locations
-# that have more than 1000 listings and saw that Williamsburg and Bedford-Stuyvesant, which are both in Brooklyn, were 
-# the most popular neighborhoods in the data set. 
+# The first unique plot that is created is a pie plot, that is used as a proportional representation of data 
+# in a column. Pie plots take in numeric data and the neighborhood column is of a different type, so the 
+# number of occurrences were counted in order to quantify this data. Since the number of listings are well 
+# over over 40000 listings, I wanted to find the most popular neighborhoods and see which places have the 
+# most listings within those areas. I selected locations that have more than 1000 listings and saw that 
+# Williamsburg and Bedford-Stuyvesant, which are both in Brooklyn, were the most popular neighborhoods in 
+# the data set. 
 top5df = df['neighbourhood'].value_counts()
 top5df = top5df[top5df > 1000]
 top5df.plot.pie(autopct='%1.0f%%').set_title("Most Popular Neighborhoods Based on Airbnb Listings")
 
 # %%
-# Another element I wanted to reveal about the data set was the types of rooms that were in the Airbnb listings, based on the
-# the location of the listing. I used a scatter plot to do so After creating the chart (and using a previous chart from Part 4 for the location based on 
-# the latitude and longitude), I was able to see that in Bronx and in Brooklyn there were more private rooms, in Queens, 
-# there was a mix between private rooms and entire homes/apartments, and in Manhattan there were mostly listings that 
+# Another element I wanted to reveal about the data set was the types of rooms that were in the Airbnb 
+# listings, based on the the location of the listing. I used a scatter plot to do so After creating the 
+# chart (and using a previous chart from Part 4 for the location based on the latitude and longitude), 
+# I was able to see that in Bronx and in Brooklyn there were more private rooms, in Queens, there was a 
+# mix between private rooms and entire homes/apartments, and in Manhattan there were mostly listings that 
 # included the entire home/apartment.
 sb.scatterplot(data=df, x="latitude", y="longitude", hue="room_type").set_title("Airbnb Listings Based on Room Type")
 plt.ylim(-74.3, -73.7)
